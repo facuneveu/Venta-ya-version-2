@@ -1,0 +1,21 @@
+# .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+TestResults/
+
+# Configuración de producción (connection string y clave JWT reales)
+appsettings.Production.json
+appsettings.*.local.json
+
+# Imágenes subidas en desarrollo
+backend/VentaYa.Api/wwwroot/uploads/*
+!backend/VentaYa.Api/wwwroot/uploads/.gitkeep
+
+# MAUI / varios
+node_modules/
+*.log
+.env
+.env.*

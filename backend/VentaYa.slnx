@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="VentaYa.Api/VentaYa.Api.csproj" />
+  <Project Path="VentaYa.Tests/VentaYa.Tests.csproj" />
+</Solution>
