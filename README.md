@@ -29,6 +29,12 @@ cd backend
 dotnet test
 ```
 
+Pruebas de la API con Postman (75 requests, 124 aserciones): ver [docs/postman/LEEME.md](docs/postman/LEEME.md).
+
+```bash
+npx newman run docs/postman/VentaYa.postman_collection.json -e docs/postman/VentaYa.local.postman_environment.json
+```
+
 ## Configuración en producción (MonsterASP)
 
 Copiá `appsettings.Production.example.json` como `appsettings.Production.json` (queda fuera de git) y completá la cadena de conexión y una clave JWT propia de 32+ caracteres.

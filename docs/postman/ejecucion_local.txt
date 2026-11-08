@@ -1,0 +1,389 @@
+Resultado de la ejecución de la colección con Newman contra la API local (08/11/2026 19:12)
+Comando: newman run VentaYa.postman_collection.json -e VentaYa.local.postman_environment.json
+
+(node:14120) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+newman
+
+VentaYa API
+
+□ 01 Autenticación
+└ Registro del propietario
+  POST http://localhost:5080/api/auth/registro [200 OK, 542B, 186ms]
+  √  Código HTTP 200
+  √  Devuelve token y usuario
+
+└ Registro con email repetido → 409
+  POST http://localhost:5080/api/auth/registro [409 Conflict, 200B, 5ms]
+  √  Código HTTP 409
+  √  Mensaje de error
+
+└ Registro con datos inválidos → 400
+  POST http://localhost:5080/api/auth/registro [400 Bad Request, 637B, 3ms]
+  √  Código HTTP 400
+
+└ Login con contraseña incorrecta → 401
+  POST http://localhost:5080/api/auth/login [401 Unauthorized, 201B, 156ms]
+  √  Código HTTP 401
+  √  Mensaje de error
+
+└ Login correcto
+  POST http://localhost:5080/api/auth/login [200 OK, 542B, 158ms]
+  √  Código HTTP 200
+  √  Devuelve token
+
+└ Endpoint protegido sin token → 401
+  GET http://localhost:5080/api/productos [401 Unauthorized, 128B, 5ms]
+  √  Código HTTP 401
+
+└ Usuario sin negocio → 404
+  GET http://localhost:5080/api/productos [404 Not Found, 216B, 5ms]
+  √  Código HTTP 404
+  √  Pide crear un negocio
+
+└ Datos del usuario (auth/yo) sin negocio
+  GET http://localhost:5080/api/auth/yo [200 OK, 249B, 5ms]
+  √  Código HTTP 200
+  √  Negocio todavía nulo
+
+□ 02 Negocio
+└ Crear negocio (onboarding)
+  POST http://localhost:5080/api/negocio [201 Created, 497B, 10ms]
+  √  Código HTTP 201
+  √  Empieza con plan Prueba como Propietario
+  √  Slug generado sin tildes
+
+└ Crear un segundo negocio → 409
+  POST http://localhost:5080/api/negocio [409 Conflict, 186B, 6ms]
+  √  Código HTTP 409
+
+└ Obtener negocio
+  GET http://localhost:5080/api/negocio [200 OK, 446B, 4ms]
+  √  Código HTTP 200
+  √  Es el negocio creado
+
+└ Editar negocio
+  PUT http://localhost:5080/api/negocio [200 OK, 449B, 7ms]
+  √  Código HTTP 200
+  √  Se actualizó la descripción
+
+□ 03 Productos
+└ Crear producto con stock (Alfajor)
+  POST http://localhost:5080/api/productos [201 Created, 315B, 6ms]
+  √  Código HTTP 201
+  √  Datos correctos
+
+└ Crear producto sin control de stock (Gaseosa)
+  POST http://localhost:5080/api/productos [201 Created, 305B, 30ms]
+  √  Código HTTP 201
+  √  Stock nulo
+
+└ Crear producto con precio negativo → 400
+  POST http://localhost:5080/api/productos [400 Bad Request, 431B, 3ms]
+  √  Código HTTP 400
+
+└ Listar productos
+  GET http://localhost:5080/api/productos [200 OK, 371B, 5ms]
+  √  Código HTTP 200
+  √  Hay 2 productos
+
+└ Buscar productos por nombre
+  GET http://localhost:5080/api/productos?q=alfa [200 OK, 265B, 4ms]
+  √  Código HTTP 200
+  √  Solo el Alfajor
+
+└ Obtener producto por id
+  GET http://localhost:5080/api/productos/10 [200 OK, 263B, 4ms]
+  √  Código HTTP 200
+  √  Trae las imágenes (vacías)
+
+└ Editar producto
+  PUT http://localhost:5080/api/productos/10 [200 OK, 278B, 6ms]
+  √  Código HTTP 200
+  √  Descripción actualizada
+
+└ Producto inexistente → 404
+  GET http://localhost:5080/api/productos/999999 [404 Not Found, 189B, 4ms]
+  √  Código HTTP 404
+
+□ 04 Zonas de envío
+└ Crear zona de envío
+  POST http://localhost:5080/api/zonas-envio [201 Created, 255B, 6ms]
+  √  Código HTTP 201
+
+└ Listar zonas
+  GET http://localhost:5080/api/zonas-envio [200 OK, 206B, 5ms]
+  √  Código HTTP 200
+  √  Hay 1 zona
+
+└ Editar zona
+  PUT http://localhost:5080/api/zonas-envio/3 [200 OK, 201B, 5ms]
+  √  Código HTTP 200
+
+└ Zona con precio negativo → 400
+  POST http://localhost:5080/api/zonas-envio [400 Bad Request, 431B, 2ms]
+  √  Código HTTP 400
+
+□ 05 Cupones
+└ Crear cupón del 10 % (código en minúsculas)
+  POST http://localhost:5080/api/cupones [201 Created, 329B, 6ms]
+  √  Código HTTP 201
+  √  El código se guarda en mayúsculas
+
+└ Cupón con código repetido → 409
+  POST http://localhost:5080/api/cupones [409 Conflict, 201B, 6ms]
+  √  Código HTTP 409
+
+└ Cupón de más del 100 % → 400
+  POST http://localhost:5080/api/cupones [400 Bad Request, 203B, 4ms]
+  √  Código HTTP 400
+
+└ Listar cupones
+  GET http://localhost:5080/api/cupones [200 OK, 287B, 5ms]
+  √  Código HTTP 200
+  √  1 cupón sin usos
+
+□ 06 Pedidos
+└ Crear pedido con cupón y envío
+  POST http://localhost:5080/api/pedidos [201 Created, 578B, 11ms]
+  √  Código HTTP 201
+  √  Subtotal 2000
+  √  Descuento 10 % = 200
+  √  Envío 300
+  √  Total = 2000 - 200 + 300 = 2100
+  √  Estado inicial Pendiente
+
+└ El stock se descontó (10 → 8)
+  GET http://localhost:5080/api/productos/10 [200 OK, 280B, 4ms]
+  √  Código HTTP 200
+  √  Stock = 8
+
+└ Pedido con stock insuficiente → 400
+  POST http://localhost:5080/api/pedidos [400 Bad Request, 206B, 5ms]
+  √  Código HTTP 400
+  √  Informa el stock disponible
+
+└ Envío sin dirección → 400
+  POST http://localhost:5080/api/pedidos [400 Bad Request, 201B, 5ms]
+  √  Código HTTP 400
+
+└ Cupón inexistente → 400
+  POST http://localhost:5080/api/pedidos [400 Bad Request, 188B, 6ms]
+  √  Código HTTP 400
+
+└ Pedido vacío → 400
+  POST http://localhost:5080/api/pedidos [400 Bad Request, 457B, 3ms]
+  √  Código HTTP 400
+
+└ Transición inválida Pendiente → Entregado → 409
+  PATCH http://localhost:5080/api/pedidos/12/estado [409 Conflict, 218B, 5ms]
+  √  Código HTTP 409
+
+└ Pendiente → Pagado
+  PATCH http://localhost:5080/api/pedidos/12/estado [200 OK, 521B, 6ms]
+  √  Código HTTP 200
+  √  Estado Pagado
+
+└ Listar pedidos filtrados por estado
+  GET http://localhost:5080/api/pedidos?estado=Pagado [200 OK, 523B, 5ms]
+  √  Código HTTP 200
+  √  Un pedido Pagado
+
+└ Pagado → Cancelado (devuelve stock)
+  PATCH http://localhost:5080/api/pedidos/12/estado [200 OK, 524B, 22ms]
+  √  Código HTTP 200
+  √  Estado Cancelado
+
+└ El stock se restituyó (8 → 10)
+  GET http://localhost:5080/api/productos/10 [200 OK, 281B, 5ms]
+  √  Código HTTP 200
+  √  Stock = 10
+
+└ Un pedido cancelado no se reabre → 409
+  PATCH http://localhost:5080/api/pedidos/12/estado [409 Conflict, 218B, 5ms]
+  √  Código HTTP 409
+
+└ Obtener pedido por id
+  GET http://localhost:5080/api/pedidos/12 [200 OK, 524B, 5ms]
+  √  Código HTTP 200
+  √  Incluye ítems y cliente
+
+└ No se borra un producto ya vendido → 409
+  DELETE http://localhost:5080/api/productos/10 [409 Conflict, 236B, 6ms]
+  √  Código HTTP 409
+
+└ No se borra un cupón ya usado → 409
+  DELETE http://localhost:5080/api/cupones/4 [409 Conflict, 232B, 5ms]
+  √  Código HTTP 409
+
+□ 07 Respuestas rápidas
+└ Crear respuesta con variables
+  POST http://localhost:5080/api/respuestas-rapidas [201 Created, 283B, 6ms]
+  √  Código HTTP 201
+
+└ Renderizar con los datos de un pedido
+  GET http://localhost:5080/api/respuestas-rapidas/8/renderizada?pedidoId=12 [200 OK, 188B, 5ms]
+  √  Código HTTP 200
+  √  Variables reemplazadas
+
+└ Listar respuestas
+  GET http://localhost:5080/api/respuestas-rapidas [200 OK, 224B, 20ms]
+  √  Código HTTP 200
+  √  Hay 1
+
+□ 08 Catálogo público (sin login)
+└ Ver catálogo público
+  GET http://localhost:5080/api/publico/cafe-nandu-postman-2 [200 OK, 593B, 5ms]
+  √  Código HTTP 200
+  √  Productos activos y zonas
+
+└ Catálogo de un negocio inexistente → 404
+  GET http://localhost:5080/api/publico/no-existe-ningun-negocio [404 Not Found, 188B, 4ms]
+  √  Código HTTP 404
+
+└ Cliente envía un pedido (con cupón y envío)
+  POST http://localhost:5080/api/publico/cafe-nandu-postman-2/pedidos [200 OK, 522B, 10ms]
+  √  Código HTTP 200
+  √  Total = 4400 - 440 + 300 = 4260
+  √  Queda Pendiente
+
+□ 09 Panel de estadísticas
+└ Panel del negocio
+  GET http://localhost:5080/api/panel [200 OK, 1.25kB, 9ms]
+  √  Código HTTP 200
+  √  Ventas totales = 4260 (el pedido cancelado no suma)
+  √  1 pendiente y 1 cancelado
+  √  Uso del plan Prueba con días restantes
+  √  Hasta 5 últimos pedidos
+
+□ 10 Equipo (empleados)
+└ Propietario invita a un empleado
+  POST http://localhost:5080/api/equipo/invitar [201 Created, 365B, 5ms]
+  √  Código HTTP 201
+  √  Devuelve el código de invitación
+
+└ Invitar dos veces al mismo email → 409
+  POST http://localhost:5080/api/equipo/invitar [409 Conflict, 190B, 4ms]
+  √  Código HTTP 409
+
+└ Registro del empleado
+  POST http://localhost:5080/api/auth/registro [200 OK, 552B, 154ms]
+  √  Código HTTP 200
+
+└ El empleado acepta la invitación
+  POST http://localhost:5080/api/equipo/aceptar/2df8d514ced8488ca22f0004a9a8dfed [200 OK, 446B, 5ms]
+  √  Código HTTP 200
+  √  Entra con rol Empleado
+
+└ Reusar un código ya aceptado → 409
+  POST http://localhost:5080/api/equipo/aceptar/2df8d514ced8488ca22f0004a9a8dfed [409 Conflict, 197B, 3ms]
+  √  Código HTTP 409
+
+└ El empleado ve los productos del negocio
+  GET http://localhost:5080/api/productos [200 OK, 389B, 4ms]
+  √  Código HTTP 200
+  √  Ve los 2 productos del propietario
+
+└ El empleado crea un pedido
+  POST http://localhost:5080/api/pedidos [201 Created, 559B, 7ms]
+  √  Código HTTP 201
+
+└ El empleado NO ve el equipo → 403
+  GET http://localhost:5080/api/equipo [403 Forbidden, 219B, 5ms]
+  √  Código HTTP 403
+
+└ El empleado NO edita el negocio → 403
+  PUT http://localhost:5080/api/negocio [403 Forbidden, 219B, 3ms]
+  √  Código HTTP 403
+
+└ El empleado NO cambia el plan → 403
+  PUT http://localhost:5080/api/negocio/plan [403 Forbidden, 219B, 3ms]
+  √  Código HTTP 403
+
+└ Propietario lista el equipo
+  GET http://localhost:5080/api/equipo [200 OK, 326B, 4ms]
+  √  Código HTTP 200
+  √  Empleado aceptado y sin código visible
+
+└ Propietario revoca al empleado
+  DELETE http://localhost:5080/api/equipo/3 [204 No Content, 81B, 5ms]
+  √  Código HTTP 204
+
+└ El empleado revocado pierde el acceso → 404
+  GET http://localhost:5080/api/productos [404 Not Found, 216B, 4ms]
+  √  Código HTTP 404
+
+□ 11 Plan (cambio simulado)
+└ Cambiar a plan Gratis
+  PUT http://localhost:5080/api/negocio/plan [200 OK, 424B, 4ms]
+  √  Código HTTP 200
+  √  Plan Gratis
+
+└ Panel con límites del plan Gratis
+  GET http://localhost:5080/api/panel [200 OK, 1.61kB, 7ms]
+  √  Código HTTP 200
+  √  Límites 10 / 30 / 5
+
+└ Cambiar a plan Pago anual
+  PUT http://localhost:5080/api/negocio/plan [200 OK, 420B, 6ms]
+  √  Código HTTP 200
+  √  Plan Pago anual
+
+└ Panel sin límites (plan Pago)
+  GET http://localhost:5080/api/panel [200 OK, 1.61kB, 7ms]
+  √  Código HTTP 200
+  √  Límites ilimitados (null)
+
+└ Plan inexistente → 400
+  PUT http://localhost:5080/api/negocio/plan [400 Bad Request, 410B, 2ms]
+  √  Código HTTP 400
+
+□ 12 Aislamiento entre negocios
+└ Registro de otro usuario
+  POST http://localhost:5080/api/auth/registro [200 OK, 531B, 144ms]
+  √  Código HTTP 200
+
+└ Otro usuario crea su negocio
+  POST http://localhost:5080/api/negocio [201 Created, 462B, 6ms]
+  √  Código HTTP 201
+
+└ No puede ver un pedido ajeno → 404
+  GET http://localhost:5080/api/pedidos/12 [404 Not Found, 187B, 4ms]
+  √  Código HTTP 404
+
+└ No puede ver un producto ajeno → 404
+  GET http://localhost:5080/api/productos/10 [404 Not Found, 189B, 3ms]
+  √  Código HTTP 404
+
+└ No puede cambiar el estado de un pedido ajeno → 404
+  PATCH http://localhost:5080/api/pedidos/12/estado [404 Not Found, 187B, 4ms]
+  √  Código HTTP 404
+
+└ Su lista de pedidos está vacía
+  GET http://localhost:5080/api/pedidos [200 OK, 150B, 3ms]
+  √  Código HTTP 200
+  √  Sin pedidos
+
+└ No puede pedir productos de otro negocio → 400
+  POST http://localhost:5080/api/pedidos [400 Bad Request, 212B, 3ms]
+  √  Código HTTP 400
+
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                75 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                75 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │               124 │                0 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 7.6s                                       │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 15.82kB (approx)                          │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 16ms [min: 2ms, max: 186ms, s.d.: 38ms] │
+└────────────────────────────────────────────────────────────────┘
