@@ -52,6 +52,22 @@ public class NegocioController(VentaYaDbContext db, NegocioActual actual) : Cont
         return CreatedAtAction(nameof(Obtener), NegocioDto.Desde(negocio, esPropietario: true));
     }
 
+    /// <summary>
+    /// Cambia de plan (Gratis / Pago). SIMULADO: en el TP no se integra una pasarela de pago;
+    /// sirve para demostrar cómo cambian los límites.
+    /// </summary>
+    [HttpPut("plan")]
+    public async Task<ActionResult<NegocioDto>> CambiarPlan(CambiarPlanDto dto)
+    {
+        var negocio = await actual.ObtenerComoPropietarioAsync();
+        negocio.PlanId = dto.Plan == "Pago" ? PlanesIds.Pago : PlanesIds.Gratis;
+        negocio.PlanPeriodo = dto.Periodo;
+        negocio.TrialExpiraEn = null;
+        await db.SaveChangesAsync();
+        await db.Entry(negocio).Reference(n => n.Plan).LoadAsync();
+        return Ok(NegocioDto.Desde(negocio, esPropietario: true));
+    }
+
     /// <summary>Edita el perfil del negocio (solo el propietario).</summary>
     [HttpPut]
     public async Task<ActionResult<NegocioDto>> Editar(NegocioGuardarDto dto)

@@ -45,6 +45,25 @@ public static class ReglasNegocio
     public static bool PruebaVencida(Plan plan, DateTime? trialExpiraEn, DateTime ahora) =>
         plan.Id == PlanesIds.Prueba && (trialExpiraEn is null || trialExpiraEn <= ahora);
 
+    /// <summary>
+    /// Reemplaza las variables de una respuesta rápida: {nombre}, {total} y {link}.
+    /// Si falta el dato de una variable, se deja tal cual para que el dueño la complete.
+    /// El total se muestra al estilo argentino: $6.700,50.
+    /// </summary>
+    public static string RenderizarRespuesta(string contenido, string? nombre, decimal? total, string? link)
+    {
+        var texto = contenido;
+        if (nombre is not null) texto = texto.Replace("{nombre}", nombre, StringComparison.OrdinalIgnoreCase);
+        if (link is not null) texto = texto.Replace("{link}", link, StringComparison.OrdinalIgnoreCase);
+        if (total is { } t)
+        {
+            var formato = t.ToString("#,##0.##", System.Globalization.CultureInfo.InvariantCulture)
+                .Replace(",", "#").Replace(".", ",").Replace("#", ".");
+            texto = texto.Replace("{total}", "$" + formato, StringComparison.OrdinalIgnoreCase);
+        }
+        return texto;
+    }
+
     /// <summary>Convierte un nombre en un slug de URL: "Café Ñandú" -> "cafe-nandu".</summary>
     public static string GenerarSlug(string nombre)
     {
