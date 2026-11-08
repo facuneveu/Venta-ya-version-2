@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.PlanPage"
+             x:DataType="vm:PlanViewModel"
+             Title="Plan y límites"
+             BackgroundColor="{StaticResource Fondo}">
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="12">
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Tu plan actual" Style="{StaticResource Subtitulo}" />
+                    <Label Text="{Binding Uso.Plan}" FontSize="30" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                    <Label Text="{Binding Uso.DiasDePruebaRestantes, StringFormat='Te quedan {0} días de prueba con todo ilimitado'}"
+                           IsVisible="{Binding Uso.DiasDePruebaRestantes, Converter={StaticResource NoNulo}}" Style="{StaticResource Subtitulo}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Uso" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Productos" />
+                        <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="{Binding Uso.Productos}" FontAttributes="Bold" />
+                            <Label Text="{Binding Uso.MaxProductos, Converter={StaticResource Limite}, StringFormat='de {0}'}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Pedidos este mes" />
+                        <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="{Binding Uso.PedidosMes}" FontAttributes="Bold" />
+                            <Label Text="{Binding Uso.MaxPedidosMes, Converter={StaticResource Limite}, StringFormat='de {0}'}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Respuestas rápidas" />
+                        <HorizontalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="{Binding Uso.Respuestas}" FontAttributes="Bold" />
+                            <Label Text="{Binding Uso.MaxRespuestas, Converter={StaticResource Limite}, StringFormat='de {0}'}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding Error}" IsVisible="{Binding HayError}" Style="{StaticResource MensajeError}" />
+
+            <Button Text="Pasar a plan Pago (ilimitado)" Command="{Binding CambiarCommand}" CommandParameter="Pago" IsEnabled="{Binding NoEstaOcupado}" />
+            <Button Text="Volver al plan Gratis" Style="{StaticResource BotonSecundario}" Command="{Binding CambiarCommand}" CommandParameter="Gratis" />
+            <Label Text="El cambio de plan es una simulación: en este proyecto no hay cobro real. Sirve para ver cómo cambian los límites."
+                   Style="{StaticResource Subtitulo}" FontSize="12" />
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}" IsVisible="{Binding EstaOcupado}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

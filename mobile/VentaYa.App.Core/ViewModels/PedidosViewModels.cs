@@ -13,6 +13,10 @@ public partial class InicioViewModel(IApiClient api, Sesion sesion, INavegacion 
     [ObservableProperty] private string _ventasMes = "$0";
     [ObservableProperty] private string _resumenPlan = "";
     [ObservableProperty] private string? _avisoPlan;
+    [ObservableProperty] private int _pendientes;
+    [ObservableProperty] private int _confirmados;
+    [ObservableProperty] private int _pagados;
+    [ObservableProperty] private int _entregados;
 
     public string NombreNegocio => sesion.Negocio?.Nombre ?? "";
     public ObservableCollection<PedidoDto> UltimosPedidos { get; } = [];
@@ -36,6 +40,10 @@ public partial class InicioViewModel(IApiClient api, Sesion sesion, INavegacion 
             AvisoPlan = $"Usaste {uso.Productos} de {mp} productos de tu plan.";
         else if (uso is { MaxPedidosMes: { } mpm } && uso.PedidosMes >= mpm * 0.8)
             AvisoPlan = $"Llevás {uso.PedidosMes} de {mpm} pedidos este mes.";
+        Pendientes = Cantidad("Pendiente");
+        Confirmados = Cantidad("Confirmado");
+        Pagados = Cantidad("Pagado");
+        Entregados = Cantidad("Entregado");
         OnPropertyChanged(nameof(NombreNegocio));
     });
 

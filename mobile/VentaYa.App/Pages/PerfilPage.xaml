@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.PerfilPage"
+             x:DataType="vm:PerfilViewModel"
+             Title="Perfil del negocio"
+             BackgroundColor="{StaticResource Fondo}">
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="12">
+            <Label Text="Nombre del negocio" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Nombre}" />
+
+            <Label Text="Teléfono / WhatsApp" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Telefono}" Keyboard="Telephone" />
+
+            <Label Text="Dirección" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Direccion}" />
+
+            <Label Text="Descripción" Style="{StaticResource Etiqueta}" />
+            <Editor Text="{Binding Descripcion}" HeightRequest="90" AutoSize="TextChanges" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Switch IsToggled="{Binding EnvioHabilitado}" VerticalOptions="Center" />
+                <Label Text="Hago envíos a domicilio" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <Label Text="{Binding Error}" IsVisible="{Binding HayError}" Style="{StaticResource MensajeError}" />
+            <Button Text="Guardar cambios" Command="{Binding GuardarCommand}" IsEnabled="{Binding NoEstaOcupado}" />
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}" IsVisible="{Binding EstaOcupado}" />
+
+            <Border Style="{StaticResource Tarjeta}" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Tu catálogo público" FontAttributes="Bold" />
+                    <Label Text="Tus clientes lo ven y envían pedidos sin crear una cuenta." Style="{StaticResource Subtitulo}" FontSize="12" />
+                    <Label x:Name="LblLink" FontSize="12" TextColor="{StaticResource Primary}" />
+                    <Button Text="Compartir link" Style="{StaticResource BotonSecundario}" Clicked="OnCompartirLink" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

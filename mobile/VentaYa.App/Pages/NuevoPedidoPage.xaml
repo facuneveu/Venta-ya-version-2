@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             xmlns:m="clr-namespace:VentaYa.App.Core.Models;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.NuevoPedidoPage"
+             x:DataType="vm:NuevoPedidoViewModel"
+             Title="Nuevo pedido"
+             BackgroundColor="{StaticResource Fondo}">
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="12">
+            <Label Text="Productos" FontAttributes="Bold" FontSize="16" />
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Lineas}" Spacing="8">
+                <BindableLayout.EmptyView>
+                    <Label Text="No tenés productos activos. Cargalos desde la pestaña Catálogo." Style="{StaticResource Subtitulo}" />
+                </BindableLayout.EmptyView>
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:LineaPedido">
+                        <Border Style="{StaticResource Tarjeta}" Padding="10">
+                            <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="10">
+                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                    <Label Text="{Binding Producto.Nombre}" FontAttributes="Bold" />
+                                    <Label Text="{Binding Producto.Precio, Converter={StaticResource Dinero}}" Style="{StaticResource Subtitulo}" FontSize="13" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="−" WidthRequest="44" HeightRequest="44" Padding="0" FontSize="20"
+                                        Command="{Binding RestarCommand, Source={RelativeSource AncestorType={x:Type vm:NuevoPedidoViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                                <Label Grid.Column="2" Text="{Binding Cantidad}" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" WidthRequest="28" HorizontalTextAlignment="Center" />
+                                <Button Grid.Column="3" Text="+" WidthRequest="44" HeightRequest="44" Padding="0" FontSize="20"
+                                        Command="{Binding SumarCommand, Source={RelativeSource AncestorType={x:Type vm:NuevoPedidoViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <Label Text="Cliente" FontAttributes="Bold" FontSize="16" Margin="0,8,0,0" />
+            <Entry Text="{Binding ClienteNombre}" Placeholder="Nombre del cliente" />
+            <Entry Text="{Binding ClienteTelefono}" Placeholder="Teléfono / WhatsApp" Keyboard="Telephone" />
+
+            <Label Text="Entrega y pago" FontAttributes="Bold" FontSize="16" Margin="0,8,0,0" />
+            <VerticalStackLayout IsVisible="{Binding HaceEnvios}" Spacing="8">
+                <Label Text="Zona de envío (dejá vacío si retira en el local)" Style="{StaticResource Etiqueta}" />
+                <Picker ItemsSource="{Binding Zonas}" ItemDisplayBinding="{Binding Nombre, x:DataType=m:ZonaDto}"
+                        SelectedItem="{Binding Zona}" Title="Sin envío (retira)" />
+                <Entry Text="{Binding Direccion}" Placeholder="Dirección de entrega" />
+            </VerticalStackLayout>
+
+            <Label Text="Método de pago" Style="{StaticResource Etiqueta}" />
+            <Picker ItemsSource="{x:Static vm:NuevoPedidoViewModel.MetodosPago}" SelectedItem="{Binding MetodoPago}" />
+
+            <Entry Text="{Binding CodigoCupon}" Placeholder="Código de cupón (opcional)" />
+            <Editor Text="{Binding Notas}" Placeholder="Notas (opcional)" HeightRequest="70" AutoSize="TextChanges" />
+
+            <Border Style="{StaticResource Tarjeta}" BackgroundColor="#E8EEF4">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout>
+                        <Label Text="Total estimado" FontAttributes="Bold" />
+                        <Label Text="El descuento del cupón se calcula al guardar." Style="{StaticResource Subtitulo}" FontSize="11" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="1" Text="{Binding TotalEstimado, Converter={StaticResource Dinero}}"
+                           FontSize="22" FontAttributes="Bold" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <Label Text="{Binding Error}" IsVisible="{Binding HayError}" Style="{StaticResource MensajeError}" />
+            <Button Text="Guardar pedido" Command="{Binding CrearCommand}" IsEnabled="{Binding NoEstaOcupado}" />
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}" IsVisible="{Binding EstaOcupado}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

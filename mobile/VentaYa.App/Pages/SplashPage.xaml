@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.SplashPage"
+             x:DataType="vm:SplashViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Primary}">
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="18">
+        <Label Text="VentaYa" FontSize="44" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
+        <Label Text="Tus pedidos, ordenados." FontSize="16" TextColor="#D6E2EE" HorizontalOptions="Center" />
+        <ActivityIndicator IsRunning="True" Color="White" />
+    </VerticalStackLayout>
+</ContentPage>

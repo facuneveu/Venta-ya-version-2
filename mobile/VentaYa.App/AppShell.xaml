@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="VentaYa.App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:VentaYa.App.Pages"
+    FlyoutBehavior="Disabled"
+    Shell.BackgroundColor="{StaticResource Primary}"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="White"
+    Shell.TabBarBackgroundColor="White"
+    Shell.TabBarForegroundColor="{StaticResource Primary}"
+    Shell.TabBarTitleColor="{StaticResource Primary}"
+    Shell.TabBarUnselectedColor="#8A97A0">
+
+    <!-- Pantallas de acceso (sin pestañas) -->
+    <ShellContent Route="splash" ContentTemplate="{DataTemplate pages:SplashPage}" />
+    <ShellContent Route="login" ContentTemplate="{DataTemplate pages:LoginPage}" />
+    <ShellContent Route="onboarding" ContentTemplate="{DataTemplate pages:OnboardingPage}" />
+
+    <!-- Navegación principal -->
+    <TabBar Route="principal">
+        <ShellContent Title="Inicio" Route="inicio" ContentTemplate="{DataTemplate pages:InicioPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="🏠" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Pedidos" Route="pedidos" ContentTemplate="{DataTemplate pages:PedidosPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="🧾" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Catálogo" Route="catalogo" ContentTemplate="{DataTemplate pages:CatalogoPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="🛍" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Más" Route="mas" ContentTemplate="{DataTemplate pages:MasPage}">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="☰" Size="22" />
+            </ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
+</Shell>

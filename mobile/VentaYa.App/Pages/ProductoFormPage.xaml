@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             xmlns:m="clr-namespace:VentaYa.App.Core.Models;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.ProductoFormPage"
+             x:DataType="vm:ProductoFormViewModel"
+             Title="Producto"
+             BackgroundColor="{StaticResource Fondo}">
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="12">
+            <Label Text="Nombre" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Nombre}" Placeholder="Ej: Alfajor triple" />
+
+            <Label Text="Descripción (opcional)" Style="{StaticResource Etiqueta}" />
+            <Editor Text="{Binding Descripcion}" HeightRequest="80" AutoSize="TextChanges" />
+
+            <Label Text="Precio" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Precio}" Keyboard="Numeric" Placeholder="1500" />
+
+            <Label Text="Stock (vacío = no controlar)" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Stock}" Keyboard="Numeric" Placeholder="Ej: 20" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Switch IsToggled="{Binding Activo}" VerticalOptions="Center" />
+                <Label Text="Visible para los clientes" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <Label Text="{Binding Error}" IsVisible="{Binding HayError}" Style="{StaticResource MensajeError}" />
+
+            <Button Text="Guardar" Command="{Binding GuardarCommand}" IsEnabled="{Binding NoEstaOcupado}" />
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}" IsVisible="{Binding EstaOcupado}" />
+
+            <!-- Imágenes: solo con el producto ya guardado -->
+            <VerticalStackLayout x:Name="SeccionImagenes" Spacing="10" Margin="0,10,0,0">
+                <Label Text="Imágenes (hasta 5)" FontAttributes="Bold" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Imagenes}" Spacing="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="m:ImagenDto">
+                            <Border Style="{StaticResource Tarjeta}" Padding="8">
+                                <Grid ColumnDefinitions="90,*,Auto" ColumnSpacing="10">
+                                    <Image Source="{Binding Url, Converter={StaticResource ImagenUrl}}" HeightRequest="70" Aspect="AspectFill" />
+                                    <Label Grid.Column="1" Text="{Binding Orden, StringFormat='Imagen {0}'}" VerticalOptions="Center" Style="{StaticResource Subtitulo}" />
+                                    <Button Grid.Column="2" Text="Quitar" Style="{StaticResource BotonPeligro}" HeightRequest="40"
+                                            Command="{Binding EliminarImagenCommand, Source={RelativeSource AncestorType={x:Type vm:ProductoFormViewModel}}}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+                <Button Text="Agregar imagen" Style="{StaticResource BotonSecundario}" Clicked="OnAgregarImagen" />
+            </VerticalStackLayout>
+
+            <Button x:Name="BtnEliminar" Text="Eliminar producto" Style="{StaticResource BotonPeligro}"
+                    Command="{Binding EliminarCommand}" Margin="0,16,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

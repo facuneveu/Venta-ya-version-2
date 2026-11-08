@@ -1,0 +1,6 @@
+<Project>
+  <!-- Si existe un Android SDK en D:\android-sdk (instalado para este proyecto) se usa automáticamente. -->
+  <PropertyGroup Condition="'$(AndroidSdkDirectory)' == '' And Exists('D:\android-sdk\platforms')">
+    <AndroidSdkDirectory>D:\android-sdk</AndroidSdkDirectory>
+  </PropertyGroup>
+</Project>

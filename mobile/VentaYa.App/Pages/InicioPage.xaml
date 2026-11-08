@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             xmlns:m="clr-namespace:VentaYa.App.Core.Models;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.InicioPage"
+             x:DataType="vm:InicioViewModel"
+             Title="Inicio"
+             BackgroundColor="{StaticResource Fondo}">
+    <RefreshView IsRefreshing="{Binding EstaOcupado, Mode=OneWay}" Command="{Binding CargarCommand}">
+        <ScrollView>
+            <VerticalStackLayout Padding="18" Spacing="14">
+                <Label Text="{Binding NombreNegocio}" Style="{StaticResource Titulo}" />
+                <Label Text="{Binding ResumenPlan}" Style="{StaticResource Subtitulo}" />
+
+                <Label Text="{Binding Error}" IsVisible="{Binding HayError}" Style="{StaticResource MensajeError}" />
+                <Label Text="{Binding AvisoPlan}" IsVisible="{Binding AvisoPlan, Converter={StaticResource NoNulo}}"
+                       BackgroundColor="#FFF4E0" TextColor="{StaticResource Aviso}" Padding="10" />
+
+                <Border Style="{StaticResource Tarjeta}">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Ventas del mes" Style="{StaticResource Subtitulo}" />
+                        <Label Text="{Binding VentasMes}" FontSize="34" FontAttributes="Bold" TextColor="{StaticResource Exito}" />
+                        <Label Text="{Binding Panel.PedidosMes, StringFormat='{0} pedidos este mes'}" Style="{StaticResource Subtitulo}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                    <Border Style="{StaticResource Tarjeta}" Padding="8" Grid.Column="0">
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding Pendientes}" FontSize="22" FontAttributes="Bold" TextColor="#B26A00" HorizontalOptions="Center" />
+                            <Label Text="Pendientes" FontSize="11" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource Tarjeta}" Padding="8" Grid.Column="1">
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding Confirmados}" FontSize="22" FontAttributes="Bold" TextColor="#1F4E79" HorizontalOptions="Center" />
+                            <Label Text="Confirmados" FontSize="11" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource Tarjeta}" Padding="8" Grid.Column="2">
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding Pagados}" FontSize="22" FontAttributes="Bold" TextColor="#2E7D5B" HorizontalOptions="Center" />
+                            <Label Text="Pagados" FontSize="11" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource Tarjeta}" Padding="8" Grid.Column="3">
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding Entregados}" FontSize="22" FontAttributes="Bold" TextColor="#5C6B73" HorizontalOptions="Center" />
+                            <Label Text="Entregados" FontSize="11" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Button Text="+ Nuevo pedido" Command="{Binding NuevoPedidoCommand}" />
+
+                <Label Text="Últimos pedidos" FontAttributes="Bold" FontSize="16" Margin="0,6,0,0" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding UltimosPedidos}" Spacing="8">
+                    <BindableLayout.EmptyView>
+                        <Label Text="Todavía no recibiste pedidos." Style="{StaticResource Subtitulo}" />
+                    </BindableLayout.EmptyView>
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="m:PedidoDto">
+                            <Border Style="{StaticResource Tarjeta}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding AbrirPedidoCommand, Source={RelativeSource AncestorType={x:Type vm:InicioViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                    <Label Grid.Column="0" Text="{Binding ClienteNombre}" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Text="{Binding Total, Converter={StaticResource Dinero}}" FontAttributes="Bold" />
+                                    <Label Grid.Row="1" Grid.Column="0" Text="{Binding Estado}"
+                                           TextColor="{Binding Estado, Converter={StaticResource EstadoColor}}" FontSize="13" />
+                                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding CreadoEn, Converter={StaticResource FechaLocal}}"
+                                           Style="{StaticResource Subtitulo}" FontSize="12" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

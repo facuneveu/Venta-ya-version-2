@@ -15,6 +15,15 @@ public partial class MasViewModel(Sesion sesion, INavegacion nav, IDialogos dial
 
     [RelayCommand] private Task AbrirAsync(string ruta) => nav.IrAAsync(ruta);
 
+    /// <summary>La pestaña queda en memoria: al volver a mostrarla se refrescan los datos de la sesión.</summary>
+    [RelayCommand]
+    private void Actualizar()
+    {
+        OnPropertyChanged(nameof(NombreNegocio));
+        OnPropertyChanged(nameof(Usuario));
+        OnPropertyChanged(nameof(EsPropietario));
+    }
+
     [RelayCommand]
     private async Task CerrarSesionAsync()
     {

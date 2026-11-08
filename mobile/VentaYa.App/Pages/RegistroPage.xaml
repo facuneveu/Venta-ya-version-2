@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.RegistroPage"
+             x:DataType="vm:RegistroViewModel"
+             Title="Crear cuenta"
+             BackgroundColor="{StaticResource Fondo}">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="14">
+            <Label Text="Creá tu cuenta" Style="{StaticResource Titulo}" />
+            <Label Text="Es gratis y no necesitás tarjeta." Style="{StaticResource Subtitulo}" />
+
+            <Label Text="Tu nombre" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Nombre}" Placeholder="Nombre y apellido" />
+
+            <Label Text="Email" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Email}" Keyboard="Email" Placeholder="tu@email.com" />
+
+            <Label Text="Contraseña (mínimo 6 caracteres)" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Password}" IsPassword="True" />
+
+            <Label Text="Repetí la contraseña" Style="{StaticResource Etiqueta}" />
+            <Entry Text="{Binding Confirmacion}" IsPassword="True" ReturnCommand="{Binding CrearCuentaCommand}" />
+
+            <Label Text="{Binding Error}" IsVisible="{Binding HayError}" Style="{StaticResource MensajeError}" />
+
+            <Button Text="Crear cuenta" Command="{Binding CrearCuentaCommand}" IsEnabled="{Binding NoEstaOcupado}" Margin="0,6,0,0" />
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}" IsVisible="{Binding EstaOcupado}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

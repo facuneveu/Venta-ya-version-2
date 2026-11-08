@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:VentaYa.App.Core.ViewModels;assembly=VentaYa.App.Core"
+             xmlns:m="clr-namespace:VentaYa.App.Core.Models;assembly=VentaYa.App.Core"
+             x:Class="VentaYa.App.Pages.PedidoDetallePage"
+             x:DataType="vm:PedidoDetalleViewModel"
+             Title="Pedido"
+             BackgroundColor="{StaticResource Fondo}">
+    <ScrollView>
+        <VerticalStackLayout Padding="18" Spacing="14">
+            <Label Text="{Binding Error}" IsVisible="{Binding HayError}" Style="{StaticResource MensajeError}" />
+            <ActivityIndicator IsRunning="{Binding EstaOcupado}" IsVisible="{Binding EstaOcupado}" />
+
+            <VerticalStackLayout Spacing="14" IsVisible="{Binding Pedido, Converter={StaticResource NoNulo}}">
+                <Border Style="{StaticResource Tarjeta}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="{Binding Pedido.Id, StringFormat='Pedido #{0}'}" Style="{StaticResource Titulo}" FontSize="20" />
+                        <Label Text="{Binding Pedido.Estado}" FontAttributes="Bold" FontSize="18"
+                               TextColor="{Binding Pedido.Estado, Converter={StaticResource EstadoColor}}" />
+                        <Label Text="{Binding Pedido.CreadoEn, Converter={StaticResource FechaLocal}}" Style="{StaticResource Subtitulo}" />
+                        <Label Text="{Binding Pedido.MetodoPago, StringFormat='Pago: {0}'}" Style="{StaticResource Subtitulo}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Tarjeta}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Cliente" Style="{StaticResource Subtitulo}" />
+                        <Label Text="{Binding Pedido.ClienteNombre}" FontAttributes="Bold" />
+                        <Label Text="{Binding Pedido.ClienteTelefono}" />
+                        <Label Text="{Binding Pedido.DireccionEntrega, StringFormat='Entrega: {0}'}"
+                               IsVisible="{Binding Pedido.DireccionEntrega, Converter={StaticResource NoNulo}}" />
+                        <Label Text="{Binding Pedido.Notas, StringFormat='Notas: {0}'}"
+                               IsVisible="{Binding Pedido.Notas, Converter={StaticResource NoNulo}}" />
+                        <Button Text="Escribir por WhatsApp" Style="{StaticResource BotonSecundario}" Clicked="OnWhatsApp" Margin="0,6,0,0" />
+                        <Button Text="Enviar respuesta rápida" Style="{StaticResource BotonSecundario}" Clicked="OnRespuestaRapida" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Tarjeta}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Productos" Style="{StaticResource Subtitulo}" />
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Pedido.Items}" Spacing="6">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="m:ItemPedidoDto">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Grid.Column="0" Text="{Binding Cantidad, StringFormat='{0} x '}" FontAttributes="Bold" HorizontalOptions="Start" />
+                                        <Label Grid.Column="0" Text="{Binding Producto}" Margin="34,0,0,0" />
+                                        <Label Grid.Column="1" Text="{Binding Subtotal, Converter={StaticResource Dinero}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                        <BoxView HeightRequest="1" Color="#DDE3EA" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Subtotal" Style="{StaticResource Subtitulo}" />
+                            <Label Grid.Column="1" Text="{Binding Pedido.Subtotal, Converter={StaticResource Dinero}}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Envío" Style="{StaticResource Subtitulo}" />
+                            <Label Grid.Column="1" Text="{Binding Pedido.CostoEnvio, Converter={StaticResource Dinero}}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Descuento" Style="{StaticResource Subtitulo}" />
+                            <Label Grid.Column="1" Text="{Binding Pedido.Descuento, Converter={StaticResource Dinero}}" TextColor="{StaticResource Exito}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Total" FontAttributes="Bold" FontSize="18" />
+                            <Label Grid.Column="1" Text="{Binding Pedido.Total, Converter={StaticResource Dinero}}" FontAttributes="Bold" FontSize="18" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="Cambiar estado a:" FontAttributes="Bold"
+                       IsVisible="{Binding EstadosPermitidos.Count, Converter={StaticResource MayorACero}}" />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding EstadosPermitidos}" Spacing="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="m:EstadoPedido">
+                            <Button Text="{Binding .}" Style="{StaticResource BotonSecundario}"
+                                    Command="{Binding CambiarEstadoCommand, Source={RelativeSource AncestorType={x:Type vm:PedidoDetalleViewModel}}}"
+                                    CommandParameter="{Binding .}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
