@@ -6,7 +6,8 @@ Proyecto final de **Aplicaciones Móviles (P3)**: app móvil (.NET MAUI) + API R
 |---|---|
 | `backend/VentaYa.Api` | API REST en ASP.NET Core (.NET 10) con Entity Framework Core y JWT |
 | `backend/VentaYa.Tests` | Tests unitarios y de servicios (xUnit) |
-| `mobile/` | App móvil .NET MAUI *(en desarrollo)* |
+| `mobile/VentaYa.App.Core` | Lógica de la app móvil: cliente de la API, sesión y ViewModels de todas las pantallas (probados con xUnit) |
+| `mobile/` | App móvil .NET MAUI: pantallas XAML *(en desarrollo; requiere el workload MAUI)* |
 | `docs/` | Plan, documentación, DER, casos de uso y diagrama de navegación |
 
 ## Ejecutar el backend en local
