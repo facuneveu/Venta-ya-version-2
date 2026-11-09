@@ -85,11 +85,11 @@ public class ApiClient(HttpClient http, Sesion sesion) : IApiClient
         }
         catch (HttpRequestException)
         {
-            throw new ApiException("No hay conexión con el servidor. Revisá tu internet e intentá de nuevo.", 0);
+            throw new ApiException($"No hay conexión con el servidor ({http.BaseAddress}). Revisá tu internet y la dirección del servidor.", 0);
         }
         catch (TaskCanceledException)
         {
-            throw new ApiException("El servidor tardó demasiado en responder. Intentá de nuevo.", HttpStatusCode.RequestTimeout);
+            throw new ApiException($"El servidor ({http.BaseAddress}) tardó demasiado en responder. Revisá que la dirección sea la correcta y que la PC esté encendida.", HttpStatusCode.RequestTimeout);
         }
 
         using (resp)

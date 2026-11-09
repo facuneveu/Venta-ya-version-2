@@ -8,6 +8,9 @@ public partial class App : Application
     {
         InitializeComponent();
 
+        // La interfaz está diseñada en claro: se ignora el modo oscuro del teléfono (si no, el texto queda blanco sobre fondo claro).
+        UserAppTheme = AppTheme.Light;
+
         // Si el token vence (o se cierra la sesión) en cualquier pantalla, se vuelve al login.
         sesion.SesionCerrada += () => MainThread.BeginInvokeOnMainThread(async () =>
         {

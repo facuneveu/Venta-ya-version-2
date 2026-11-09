@@ -6,9 +6,15 @@ public static class Configuracion
 #if DEBUG
     // Emulador de Android: 10.0.2.2 es la PC donde corre la API (dotnet run --urls http://0.0.0.0:5080).
     // Con un celular real: poné la IP de tu PC (ej. http://192.168.0.10:5080/) o la URL desplegada.
-    public const string UrlPorDefecto = "http://10.0.2.2:5080/";
+    public const string UrlEmulador = "http://10.0.2.2:5080/";
+
+    // Celular real conectado a la misma WiFi que la PC de desarrollo: poné acá la IP de tu PC (ipconfig).
+    public const string UrlCelularEnLan = "http://192.168.0.7:5080/";
+
+    public static string UrlPorDefecto =>
+        DeviceInfo.Current.DeviceType == DeviceType.Virtual ? UrlEmulador : UrlCelularEnLan;
 #else
-    public const string UrlPorDefecto = "https://TU-SITIO.monsterasp.net/";
+    public static string UrlPorDefecto => "https://TU-SITIO.runasp.net/";
 #endif
 
     private const string Clave = "api_url";

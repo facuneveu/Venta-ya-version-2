@@ -19,4 +19,10 @@
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <!-- La configuración de desarrollo (LocalDB y clave JWT de prueba) no se publica al hosting -->
+    <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
 </Project>

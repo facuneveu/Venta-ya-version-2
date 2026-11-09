@@ -29,7 +29,7 @@ La dirección de la API se puede cambiar **sin recompilar**: en la pantalla de l
 |---|---|
 | Emulador de Android (Debug, por defecto) | `http://10.0.2.2:5080/` |
 | Celular real en la misma WiFi que tu PC | `http://<IP-de-tu-PC>:5080/` (arrancar la API con `dotnet run --urls http://0.0.0.0:5080`) |
-| Servidor desplegado (MonsterASP) | `https://<tu-sitio>.monsterasp.net/` |
+| Servidor desplegado (MonsterASP) | `https://<tu-sitio>.runasp.net/` |
 
 > La versión **Release** no permite tráfico `http` (solo `https`); para probar contra tu PC usá la versión Debug.
 
