@@ -27,7 +27,11 @@ public record ProductoGuardarDto(string Nombre, string? Descripcion, decimal Pre
 public record ImagenDto(int Id, string Url, int Orden);
 
 public record ProductoDto(
-    int Id, string Nombre, string? Descripcion, decimal Precio, int? Stock, bool Activo, List<ImagenDto> Imagenes);
+    int Id, string Nombre, string? Descripcion, decimal Precio, int? Stock, bool Activo, List<ImagenDto> Imagenes)
+{
+    /// <summary>Ruta de la primera imagen (la de menor orden) o null si el producto no tiene fotos. Se usa en el listado.</summary>
+    public string? ImagenPrincipal => Imagenes?.OrderBy(i => i.Orden).FirstOrDefault()?.Url;
+}
 
 // ───── Pedidos ─────
 public record ItemPedidoCrearDto(int ProductoId, int Cantidad);
