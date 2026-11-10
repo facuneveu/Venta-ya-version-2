@@ -18,5 +18,9 @@ public partial class App : Application
         });
     }
 
-    protected override Window CreateWindow(IActivationState? activationState) => new Window(new AppShell());
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        UserAppTheme = AppTheme.Light; // se reafirma cuando la ventana ya existe
+        return new Window(new AppShell());
+    }
 }
