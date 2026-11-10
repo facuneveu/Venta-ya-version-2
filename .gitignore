@@ -22,3 +22,9 @@ node_modules/
 
 # APK generado
 mobile/apk/
+
+# Perfiles de publicación (el .pubxml.user guarda la contraseña de publicación)
+**/Properties/PublishProfiles/
+*.pubxml
+*.pubxml.user
+*.publishSettings
