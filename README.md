@@ -8,7 +8,7 @@ Proyecto final de **Aplicaciones Móviles (P3)**: app móvil (.NET MAUI) + API R
 | `backend/VentaYa.Tests` | Tests unitarios y de servicios (xUnit) |
 | `mobile/VentaYa.App.Core` | Lógica de la app móvil: cliente de la API, sesión y ViewModels de todas las pantallas (probados con xUnit) |
 | `mobile/VentaYa.App` | App móvil .NET MAUI (Android): 16 pantallas XAML. Ver [mobile/LEEME.md](mobile/LEEME.md) |
-| `docs/` | Documento del TP (DOCX/PDF), diagramas, colección Postman y [guía de despliegue](docs/GUIA_DESPLIEGUE.md) |
+| `docs/` | Documento del TP (DOCX/PDF), diagramas, colección Postman y capturas de la app |
 
 ## Ejecutar el backend en local
 
@@ -38,4 +38,4 @@ npx newman run docs/postman/VentaYa.postman_collection.json -e docs/postman/Vent
 
 ## Despliegue en producción (MonsterASP.NET)
 
-Paso a paso en [docs/GUIA_DESPLIEGUE.md](docs/GUIA_DESPLIEGUE.md). Resumen: copiá `appsettings.Production.example.json` como `appsettings.Production.json` (queda fuera de git), completá la cadena de conexión y una clave JWT de 32+ caracteres, y publicá desde Visual Studio con el perfil de publicación del panel.
+Resumen: copiá `appsettings.Production.example.json` como `appsettings.Production.json` (queda fuera de git), completá la cadena de conexión y una clave JWT de 32+ caracteres, y publicá desde Visual Studio con el perfil de publicación del panel.
